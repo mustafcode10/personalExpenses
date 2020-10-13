@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
-import './widgets/user_transactions.dart';
+import './models/transaction.dart';
+import './widgets/new_transaction.dart';
+import './widgets/created_mustaf.dart';
+import './widgets/transaction_list.dart';
+
+
 
 void main() {
   runApp(MyApp());
@@ -16,9 +21,48 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends StatefulWidget {
   //  String titleInput;
   //  String amountInput;
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+    final List<Transaction> _userTransactions = [
+    Transaction(
+      id: 't1',
+      title: 'New Shoes',
+      amount: 69.99,
+      date: DateTime.now(),
+    ),
+    Transaction(
+      id: 't2',
+      title: 'Weekly Groceries',
+      amount: 16.53,
+      date: DateTime.now(),
+    ),
+  ]; 
+  void _addNewTransaction(String txTitle, double txAmount){
+    final newTx = Transaction(
+      id: DateTime.now().toString(),
+      title: txTitle,
+       amount: txAmount, 
+       date: DateTime.now());
+
+       setState(() {
+         _userTransactions.add(newTx);
+         
+       });
+
+  }
+  void _startAddNewTransaction (BuildContext ctx){
+    showModalBottomSheet(context: ctx, builder: (_){
+      return NewTransaction(_addNewTransaction);
+    });
+
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +70,7 @@ class MyHomePage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Personal Expenses'),
         actions: [
-          IconButton(icon: Icon(Icons.add), onPressed: () => {}),
+          IconButton(icon: Icon(Icons.add), onPressed: () =>_startAddNewTransaction(context)),
         ],
       ),
       body: SingleChildScrollView(
@@ -48,47 +92,16 @@ class MyHomePage extends StatelessWidget {
             //   child: Text('Text TX'),
             //   color: Colors.green,
             // )
-            UserTransation(),
+           TransactionList(_userTransactions),
+            Created()
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const <Widget>[
-                Icon(
-                  Icons.favorite,
-                  color: Colors.pink,
-                  size: 24.0,
-                ),
-                Icon(
-                  Icons.audiotrack,
-                  color: Colors.green,
-                  size: 30.0,
-                ),
-                Icon(
-                  Icons.beach_access,
-                  color: Colors.blue,
-                  size: 36.0,
-                ),
-              ],
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  'Created by Mustaf',
-                  style: TextStyle(
-                      color: Colors.grey[700],
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16),
-                ),
-              ],
-            ),
+           
           ],
         ),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          print('hhh');
-        },
+        onPressed:()=> _startAddNewTransaction(context),
         child: Icon(Icons.add),
       ),
     );
