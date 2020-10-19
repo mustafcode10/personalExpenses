@@ -26,6 +26,7 @@ class Created extends StatelessWidget {
               ],
             ),
             Column(
+              mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
